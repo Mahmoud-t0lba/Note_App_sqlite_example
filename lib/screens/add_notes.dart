@@ -12,6 +12,7 @@ class _AddNotesState extends State<AddNotes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      body: Container(),
     );
   }
 }
