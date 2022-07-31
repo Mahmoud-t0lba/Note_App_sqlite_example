@@ -1,4 +1,4 @@
-# Note_App_example_sql
+# Note_App_example => by sqlite
 
 
 
