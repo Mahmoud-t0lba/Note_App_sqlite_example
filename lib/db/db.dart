@@ -16,15 +16,22 @@ class MySql {
 
   initDb() async {
     String dataBasePath = await getDatabasesPath();
-    String path = join(dataBasePath, 'test.db');
+    String path = join(dataBasePath, 'XXX.db');
     Database myDb = await openDatabase(
       path,
       onCreate: _onCreate,
-      version: 4,
+      version: 1,
       // onUpgrade: _onUpgrade,
     );
     return myDb;
   }
+
+  // _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  //   print('<<<<<<<<<<<<<<<<<<< onUpgrade >>>>>>>>>>>>>>>>>>>');
+  //   await db.execute("ALERT TABLE notes ADD COLUMN color TEXT");
+  // }
+
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   _onCreate(Database db, int version) async {
     /*
@@ -35,22 +42,16 @@ class MySql {
 
     await db.execute(
       '''
-          CREATE TABLE "notes"(
-          "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-          "title"	TEXT NOT NULL,
-          "note"	TEXT NOT NULL
+          CREATE TABLE notes(
+          id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+          title	TEXT,
+          note	TEXT,
+          color	TEXT
           )
           ''',
     );
 
     print('CREATE DATABASE AND TABLE >>>>>>>>>');
-  }
-
-  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-  _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    print('<<<<<<<<<<<<<<<<<<< onUpgrade >>>>>>>>>>>>>>>>>>>');
-    // await db.execute("ALERT TABLE notes ADD COLUMN color TEXT");
   }
 
   /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -89,9 +90,52 @@ class MySql {
 
   deleteAllDataBase() async {
     String dataBasePath = await getDatabasesPath();
-    String path = join(dataBasePath, 'test.db');
+    String path = join(dataBasePath, 'XXX.db');
 
     await deleteDatabase(path);
+  }
+
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  ///      /* shortened function */
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  read(String table) async {
+    Database? myDb = await db;
+    List<Map> response = await myDb!.query(table);
+    return response;
+  }
+
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  insert(String table, Map<String, Object?> val) async {
+    Database? myDb = await db;
+    int response = await myDb!.insert(table, val);
+    return response;
+  }
+
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  delete(String table, String? myWhere) async {
+    Database? myDb = await db;
+    int response = await myDb!.delete(
+      table,
+      where: myWhere,
+    );
+    return response;
+  }
+
+  /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  update(String table, Map<String, Object?> val, String? myWhere) async {
+    Database? myDb = await db;
+    int response = await myDb!.update(
+      table,
+      val,
+      where: myWhere,
+    );
+    return response;
   }
 
   /// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sql_example/screens/add_notes.dart';
 import 'package:sql_example/screens/home.dart';
 
 bool? islogin;
@@ -14,9 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: const HomeScreen(),
+      routes: {
+        'home': (context) => const HomeScreen(),
+        'addNotes': (context) => const AddNotes(),
+      },
     );
   }
 }

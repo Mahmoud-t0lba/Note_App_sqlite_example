@@ -1,26 +1,47 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:sql_example/screens/home.dart';
 import 'package:sql_example/widgets/custom_db_widget.dart';
 
-class AddNotes extends StatefulWidget {
-  const AddNotes({Key? key}) : super(key: key);
+class EditNotes extends StatefulWidget {
+  final note;
+  final title;
+  final color;
+  final id;
+
+  const EditNotes({
+    Key? key,
+    this.note,
+    this.color,
+    this.id,
+    this.title,
+  }) : super(key: key);
 
   @override
-  State<AddNotes> createState() => _AddNotesState();
+  State<EditNotes> createState() => _EditNotesState();
 }
 
-class _AddNotesState extends State<AddNotes> {
+class _EditNotesState extends State<EditNotes> {
   GlobalKey<FormState> formKey = GlobalKey();
   TextEditingController note = TextEditingController();
   TextEditingController title = TextEditingController();
   TextEditingController color = TextEditingController();
 
   @override
+  void initState() {
+    note.text = widget.note;
+    title.text = widget.title;
+    color.text = widget.color;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text('Add Notes'),
+        title: const Text('Edit Note'),
       ),
       body: Container(
         padding: const EdgeInsets.all(10),
@@ -51,7 +72,7 @@ class _AddNotesState extends State<AddNotes> {
                   MaterialButton(
                     color: Colors.blue,
                     textColor: Colors.white,
-                    child: const Text('Add Note'),
+                    child: const Text('Edit Note'),
                     onPressed: () async {
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
@@ -60,19 +81,31 @@ class _AddNotesState extends State<AddNotes> {
                         (route) => false,
                       );
 
-                      int response = await sql.insertData('''
-                      INSERT INTO notes (note , title , color)
-                      VALUES ("${note.text}" , "${title.text}" , "${color.text}")
+                      int response = await sql.updateData('''
+                      UPDATE notes SET 
+                      note = "${note.text}",
+                      title = "${title.text}",
+                      color = "${color.text}"
+                      WHERE id = ${widget.id} 
                       ''');
 
-                      // int response = await sql.insert("notes", {
-                      //   "note": note.text,
-                      //   "title": title.text,
-                      //   "color": color.text,
-                      // });
+                      /* shortened function used */
+
+                      // int responsse = await sql.update(
+                      //   "notes",
+                      //   {
+                      //     "note": note.text,
+                      //     "title": title.text,
+                      //     "color": color.text,
+                      //   },
+                      //   "id = ${widget.id}",
+                      // );
+
                       print('<<<<<<<$response>>>>>>>>');
                     },
                   ),
+
+                  /// ================================
                 ],
               ),
             ),

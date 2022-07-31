@@ -15,6 +15,7 @@ class InsertButton extends StatelessWidget {
       onPressed: () async {
         int response = await sql.insertData(
             "INSERT INTO 'notes' ('note') VALUES ('note ===============')");
+
         print('<<<<<<<<<<<<<<<<<$response>>>>>>>>>>>>>');
       },
     );
@@ -32,6 +33,10 @@ class ReadButton extends StatelessWidget {
       child: const Text('Read'),
       onPressed: () async {
         List<Map> response = await sql.readData("SELECT * FROM 'notes'");
+
+        /* shortened function used */
+
+        // List<Map> response = await sql.read("notes");
         for (var element in response) {
           print('<<<<<<<<<<<<<<<<<$element>>>>>>>>>>>>>\n');
         }
